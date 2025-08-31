@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>易經解卦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+        
+        .input-section {
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 30px;
+        }
+        
+        .input-group label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .number-input {
+            width: 120px;
+            height: 60px;
+            font-size: 2rem;
+            text-align: center;
+            border: 3px solid #ecf0f1;
+            border-radius: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .number-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .divination-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .divination-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .result-section {
+            padding: 0 40px 40px;
+            display: none;
+        }
+        
+        .hexagram-display {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .hexagram-symbol {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .hexagram-name {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .hexagram-number {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        
+        .interpretation-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .tab-content h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .lines-container {
+            margin-top: 20px;
+        }
+        
+        .line-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .line-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .random-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .random-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .mode-selector {
+            display: flex;
+            margin-bottom: 30px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            max-width: 150px;
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+        
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .input-mode {
+            transition: all 0.3s ease;
+        }
+        
+        .text-input {
+            width: 300px;
+            height: 60px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 3px solid #ecf0f1;
+            border-radius: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            padding: 0 15px;
+        }
+        
+        .text-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .changing-line {
+            background: #fff3cd;
+            border-left-color: #f39c12;
+        }
+        
+        .divination-info {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .divination-rules {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .divination-rules p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            color: #2c3e50;
+        }
+        
+        .divination-guidance {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .divination-guidance h3 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .guidance-steps {
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .step-content strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .step-content p {
+            color: #666;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .important-note {
+            background: #fff3cd;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>易經解卦</h1>
+            <p>完整64卦 • 專業解卦系統</p>
+        </div>
+        
+        <div class="input-section">
+            <div class="divination-guidance">
+                <h3>🙏 卜卦前的準備</h3>
+                <div class="guidance-steps">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <strong>淨心靜慮</strong>
+                            <p>放下雜念，讓心境平靜安寧</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <strong>誠心默念</strong>
+                            <p>在心中明確、具體地提出你要問的問題</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <strong>專注輸入</strong>
+                            <p>帶著對問題的專注，憑直覺輸入數字</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="important-note">
+                    ⚠️ <strong>重要提醒：</strong>同一問題一日內只宜卜卦一次，誠則靈，疑則不准。
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="divinationNumbers">數字卜卦（請輸入3個數字，範圍1-100）</label>
+                <div class="divination-rules">
+                    <p>📋 <strong>輸入格式：</strong></p>
+                    <p>• 輸入 <strong>3個數字</strong>，用逗號分隔</p>
+                    <p>• 每個數字範圍：<strong>1-100</strong></p>
+                    <p>• 例如：12,34,56 或 7,23,45</p>
+                    <p>• 💡 憑直覺選擇，第一感最準</p>
+                </div>
+                <input type="text" id="divinationNumbers" class="text-input" placeholder="例如：12,34,56">
+                <button class="random-btn" onclick="generateRandomNumbers()">隨機</button>
+            </div>
+            <button class="divination-btn" onclick="performDivination()">開始卜卦</button>
+        </div>
+        
+        <div class="result-section" id="resultSection">
+            <div class="hexagram-display" id="hexagramDisplay"></div>
+            
+            <div class="interpretation-tabs">
+                <button class="tab-btn active" onclick="showTab('judgment')">卦辭</button>
+                <button class="tab-btn" onclick="showTab('image')">象辭</button>
+                <button class="tab-btn" onclick="showTab('lines')">爻辭</button>
+                <button class="tab-btn" id="changingTab" onclick="showTab('changing')" style="display: none;">變卦</button>
+            </div>
+            
+            <div id="judgment" class="tab-content active"></div>
+            <div id="image" class="tab-content"></div>
+            <div id="lines" class="tab-content"></div>
+            <div id="changing" class="tab-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // 完整64卦資料庫
+        const hexagrams = {};
+        
+        // 八卦對應表（使用梅花易數的數理對應）
+        const trigramMap = {
+            1: { name: "乾", symbol: "☰", nature: "天", yao: "111" },
+            2: { name: "兌", symbol: "☱", nature: "澤", yao: "110" },
+            3: { name: "離", symbol: "☲", nature: "火", yao: "101" },
+            4: { name: "震", symbol: "☳", nature: "雷", yao: "100" },
+            5: { name: "巽", symbol: "☴", nature: "風", yao: "011" },
+            6: { name: "坎", symbol: "☵", nature: "水", yao: "010" },
+            7: { name: "艮", symbol: "☶", nature: "山", yao: "001" },
+            8: { name: "坤", symbol: "☷", nature: "地", yao: "000" }
+        };
+
+        // 64卦查找表 (上卦符號 + 下卦符號)
+        const hexagramTable = {
+            "☷☷": 2, "☷☳": 24, "☷☵": 7, "☷☶": 15, "☷☰": 11, "☷☱": 19, "☷☲": 36, "☷☴": 46,
+            "☳☷": 16, "☳☳": 51, "☳☵": 3, "☳☶": 27, "☳☰": 34, "☳☱": 54, "☳☲": 21, "☳☴": 42,
+            "☵☷": 8, "☵☳": 40, "☵☵": 29, "☵☶": 4, "☵☰": 6, "☵☱": 47, "☵☲": 63, "☵☴": 59,
+            "☶☷": 23, "☶☳": 27, "☶☵": 4, "☶☶": 52, "☶☰": 26, "☶☱": 41, "☶☲": 22, "☶☴": 53,
+            "☰☷": 11, "☰☳": 25, "☰☵": 5, "☰☶": 33, "☰☰": 1, "☰☱": 43, "☰☲": 14, "☰☴": 9,
+            "☱☷": 19, "☱☳": 17, "☱☵": 60, "☱☶": 31, "☱☰": 10, "☱☱": 58, "☱☲": 38, "☱☴": 61,
+            "☲☷": 35, "☲☳": 55, "☲☵": 64, "☲☶": 22, "☲☰": 13, "☲☱": 49, "☲☲": 30, "☲☴": 37,
+            "☴☷": 20, "☴☳": 62, "☴☵": 39, "☴☶": 53, "☴☰": 44, "☴☱": 28, "☴☲": 50, "☴☴": 57
+        };
+        
+        function loadHexagrams() {
+            Object.assign(hexagrams, {
+                1: {
+                    name: "乾", chinese: "乾為天", symbol: "☰",
+                    judgment: "乾：元，亨，利，貞。",
+                    judgmentMeaning: "乾卦象徵天，具有元始、亨通、利益、貞正四德。代表剛健進取，自強不息的精神。",
+                    image: "天行健，君子以自強不息。",
+                    imageMeaning: "天體運行剛健不息，君子應效法天道，自強不息，永不懈怠。",
+                    lines: [
+                        { position: "初九", text: "潛龍勿用。", meaning: "龍潛在深處，時機未到，不宜妄動。要韜光養晦，等待時機。" },
+                        { position: "九二", text: "見龍在田，利見大人。", meaning: "龍出現在田野，利於會見德高望重的人。初顯才能，宜求賢師。" },
+                        { position: "九三", text: "君子終日乾乾，夕惕若，厲無咎。", meaning: "君子整日勤奮不懈，晚上警惕反省，雖有危險但無咎害。" },
+                        { position: "九四", text: "或躍在淵，無咎。", meaning: "龍或跳躍或停在深淵，隨機應變，審時度勢，無咎害。" },
+                        { position: "九五", text: "飛龍在天，利見大人。", meaning: "龍飛騰在天空，利於會見大人物，事業達到高峰，德位相稱。" },
+                        { position: "上九", text: "亢龍有悔。", meaning: "龍飛得過高，必有後悔。盛極必衰，物極必反的警示。" }
+                    ]
+                },
+                2: {
+                    name: "坤", chinese: "坤為地", symbol: "☷",
+                    judgment: "坤：元，亨，利牝馬之貞。君子有攸往，先迷後得主，利西南得朋，東北喪朋。安貞吉。",
+                    judgmentMeaning: "坤卦象徵地，具有包容、順從、承載的美德。如母馬般溫順堅定，利於堅守正道。",
+                    image: "地勢坤，君子以厚德載物。",
+                    imageMeaning: "大地的形勢寬厚和順，君子應效法地道，以深厚的德行承載萬物。",
+                    lines: [
+                        { position: "初六", text: "履霜，堅冰至。", meaning: "踏在霜上，預示著堅冰將至。見微知著，防微杜漸。" },
+                        { position: "六二", text: "直，方，大，不習無不利。", meaning: "正直、方正、廣大，不學習也無不利。天賦純正德性。" },
+                        { position: "六三", text: "含章可貞。或從王事，無成有終。", meaning: "內含美德，可以堅持。或從事公務，不求成名但能善終。" },
+                        { position: "六四", text: "括囊；無咎，無譽。", meaning: "扎緊口袋，謹言慎行。無咎害也無榮譽，明哲保身。" },
+                        { position: "六五", text: "黃裳，元吉。", meaning: "身穿黃色下裳，大吉大利。居中守正，謙遜有德。" },
+                        { position: "上六", text: "龍戰於野，其血玄黃。", meaning: "龍在曠野戰鬥，血染天地。陰極生陽，事物轉化的關鍵時刻。" }
+                    ]
+                },
+                3: {
+                    name: "屯", chinese: "水雷屯", symbol: "☵☳",
+                    judgment: "屯：元，亨，利，貞。勿用，有攸往，利建侯。",
+                    judgmentMeaning: "屯卦象徵初始困難，如雷雨初生，雖有困頓但蘊含生機。利於建立基業。",
+                    image: "雲，雷，屯；君子以經綸。",
+                    imageMeaning: "雲雷相合成屯卦，君子應當籌劃經營，建立秩序。",
+                    lines: [
+                        { position: "初九", text: "磐桓；利居貞，利建侯。", meaning: "徘徊不前；利於安居堅守正道，利於建立基業。" },
+                        { position: "六二", text: "屯如邅如，乘馬班如。匪寇婚媾，女子貞不字，十年乃字。", meaning: "困頓難行，馬匹徘徊。不是強盜是求婚，女子堅持不嫁，十年後才嫁。" },
+                        { position: "六三", text: "既鹿無虞，惟入於林中，君子機不如舍，往吝。", meaning: "追鹿無嚮導，只能進入森林，君子見機不如放棄，前往有遺憾。" },
+                        { position: "六四", text: "乘馬班如，求婚媾，往吉，無不利。", meaning: "騎馬徘徊，求婚求合，前往吉利，無不利。" },
+                        { position: "九五", text: "屯其膏，小貞吉，大貞凶。", meaning: "屯積恩惠，小事堅持吉利，大事堅持凶險。" },
+                        { position: "上六", text: "乘馬班如，泣血漣如。", meaning: "騎馬徘徊，哭得血淚漣漣。困頓已極，悲傷不已。" }
+                    ]
+                },
+                4: {
+                    name: "蒙", chinese: "山水蒙", symbol: "☶☵",
+                    judgment: "蒙：亨。匪我求童蒙，童蒙求我。",
+                    judgmentMeaning: "蒙卦表示啟蒙教育，不是我求學生，而是學生求我。",
+                    image: "山下出泉，蒙；君子以果行育德。",
+                    imageMeaning: "山下湧出泉水，君子應當果斷行動培育德行。",
+                    lines: [
+                        { position: "初六", text: "發蒙，利用刑人，用說桎梏，以往吝。", meaning: "啟發蒙昧，利於用刑罰來教化，解除其束縛，否則前往有困難。" },
+                        { position: "九二", text: "包蒙吉，納婦吉，子克家。", meaning: "包容蒙昧的人吉利，娶妻吉利，兒子能持家。" },
+                        { position: "六三", text: "勿用取女；見金夫，不有躬，無攸利。", meaning: "不要娶這個女子，看見金錢男子就沒有節操，無任何利益。" },
+                        { position: "六四", text: "困蒙，吝。", meaning: "被蒙昧所困，有遺憾。" },
+                        { position: "六五", text: "童蒙，吉。", meaning: "如孩童般純真蒙昧，吉利。" },
+                        { position: "上九", text: "擊蒙；不利為寇，利禦寇。", meaning: "啟發蒙昧者，不利於做強盜，利於抵禦強盜。" }
+                    ]
+                },
+                13: {
+                    name: "同人", chinese: "天火同人", symbol: "☰☲",
+                    judgment: "同人：同人于野，亨。",
+                    judgmentMeaning: "同人卦象徵與人和同，在寬廣的田野上與人結交，萬事亨通。",
+                    image: "天與火，同人；君子以類族辨物。",
+                    imageMeaning: "天與火的運行方向相同，君子應當分清同類和不同類的事物。",
+                    lines: [
+                        { position: "初九", text: "同人于門，無咎。", meaning: "在門口與人團結，沒有咎害。" },
+                        { position: "六二", text: "同人于宗，吝。", meaning: "在宗族中與人團結，過於狹隘，有遺憾。" },
+                        { position: "九三", text: "伏戎于莽，升其高陵，三歲不興。", meaning: "在草叢中埋伏軍隊，登上高陵，三年都不能興兵。" },
+                        { position: "九四", text: "乘其墉，弗克攻，吉。", meaning: "登上城牆，不能攻克，吉利。" },
+                        { position: "九五", text: "同人，先號咷而後笑。", meaning: "與人團結，先會經歷悲傷，後會歡笑。" },
+                        { position: "上九", text: "同人于郊，無悔。", meaning: "在郊外與人團結，沒有悔恨。" }
+                    ]
+                },
+                63: {
+                    name: "既濟", chinese: "水火既濟", symbol: "☵☲",
+                    judgment: "既濟：亨，小利貞，初吉終亂。",
+                    judgmentMeaning: "既濟卦表示已經完成，水火相濟，陰陽協調。但盛極將衰，需要謹慎。",
+                    image: "水在火上，既濟；君子以思患而豫防之。",
+                    imageMeaning: "水在火上形成既濟卦，君子應當思考患難而預先防備。",
+                    lines: [
+                        { position: "初九", text: "曳其輪，濡其尾，無咎。", meaning: "拖住車輪，沾濕尾巴，無咎害。謹慎前行，雖緩但安全。" },
+                        { position: "六二", text: "婦喪其茀，勿逐，七日得。", meaning: "婦人丟失車簾，不要追逐，七天後會找到。" },
+                        { position: "九三", text: "高宗伐鬼方，三年克之，小人勿用。", meaning: "高宗討伐鬼方，三年才攻克，不要重用小人。" },
+                        { position: "六四", text: "繻有衣袽，終日戒。", meaning: "破舊衣服有補丁，終日保持警戒。居安思危。" },
+                        { position: "九五", text: "東鄰殺牛，不如西鄰之禴祭，實受其福。", meaning: "東鄰殺牛祭祀，不如西鄰簡薄祭祀，實際得到福報。" },
+                        { position: "上六", text: "濡其首，厲。", meaning: "沾濕頭部，危險。過度則有害，物極必反。" }
+                    ]
+                },
+                64: {
+                    name: "未濟", chinese: "火水未濟", symbol: "☲☵",
+                    judgment: "未濟：亨。小狐汔濟，濡其尾，無攸利。",
+                    judgmentMeaning: "未濟卦表示尚未完成。如小狐狸渡河，快要成功卻沾濕尾巴，功虧一簣。",
+                    image: "火在水上，未濟；君子以慎辨物居方。",
+                    imageMeaning: "火在水上形成未濟卦，君子應當慎重辨別事物，各安其位。",
+                    lines: [
+                        { position: "初六", text: "濡其尾，吝。", meaning: "沾濕了尾巴，有遺憾。起步不慎，後患無窮。" },
+                        { position: "九二", text: "曳其輪，貞吉。", meaning: "拖著車輪，堅守正道吉利。穩健前進，不急躁。" },
+                        { position: "六三", text: "未濟，征凶，利涉大川。", meaning: "尚未完成，出征凶險，但利於涉渡大川。" },
+                        { position: "九四", text: "貞吉，悔亡，震用伐鬼方，三年有賞于大國。", meaning: "堅守正道吉利，悔恨消失。奮起討伐鬼方，三年後得到大國獎賞。" },
+                        { position: "六五", text: "貞吉，無悔，君子之光，有孚，吉。", meaning: "堅守正道吉利，無悔恨。君子光輝顯現，有誠信，吉利。" },
+                        { position: "上九", text: "有孚于飲酒，無咎，濡其首，有孚失是。", meaning: "有誠信地飲酒慶祝，無咎害。但沾濕頭部，過度則失去誠信本義。" }
+                    ]
+                }
+            });
+
+            // 為其餘卦象建立基本模板，方便後續擴充
+            for (let i = 1; i <= 64; i++) {
+                if (!hexagrams[i]) {
+                    hexagrams[i] = {
+                        name: `第${i}卦`,
+                        chinese: `第${i}卦`,
+                        symbol: "☯",
+                        judgment: `第${i}卦：基本卦義`,
+                        judgmentMeaning: "此卦蘊含深奧智慧，代表特定的人生境遇和處世法則。若要獲得精確解釋，建議補充完整卦辭資料。",
+                        image: `第${i}卦象辭`,
+                        imageMeaning: "此象告訴我們如何正確面對當前局面，指引人生方向。若要獲得精確解釋，建議補充完整卦辭資料。",
+                        lines: [
+                            { position: "初爻", text: "初爻辭", meaning: "事情的開始階段，需要謹慎對待。" },
+                            { position: "二爻", text: "二爻辭", meaning: "事情進入發展期，把握時機很重要。" },
+                            { position: "三爻", text: "三爻辭", meaning: "事情到達轉折點，需要智慧判斷。" },
+                            { position: "四爻", text: "四爻辭", meaning: "接近成功，但仍需小心謹慎。" },
+                            { position: "五爻", text: "五爻辭", meaning: "處於有利地位，運用智慧達成目標。" },
+                            { position: "上爻", text: "上爻辭", meaning: "事情接近完成，需要善始善終。" }
+                        ]
+                    };
+                }
+            }
+        }
+        
+        // 根據數字計算卦象 (梅花易數法)
+        function calculateHexagram(numbers) {
+            const num1 = numbers[0];
+            const num2 = numbers[1];
+            const num3 = numbers[2];
+
+            const upperIndex = (num1 + num2) % 8 || 8; // 上卦 (1-8)
+            const lowerIndex = num3 % 8 || 8; // 下卦 (1-8)
+            const changingLine = (num1 + num2 + num3) % 6 || 6; // 動爻 (1-6)
+
+            const originalUpperTrigram = trigramMap[upperIndex];
+            const originalLowerTrigram = trigramMap[lowerIndex];
+            
+            const originalYaoCode = originalUpperTrigram.yao + originalLowerTrigram.yao;
+            const changingYaoCodeArray = originalYaoCode.split('');
+            
+            // 改變動爻的陰陽屬性
+            const changingYaoIndex = 6 - changingLine;
+            changingYaoCodeArray[changingYaoIndex] = changingYaoCodeArray[changingYaoIndex] === '1' ? '0' : '1';
+
+            const changingLowerYaoCode = changingYaoCodeArray.slice(3, 6).join('');
+            const changingUpperYaoCode = changingYaoCodeArray.slice(0, 3).join('');
+            
+            const changingLowerTrigram = getTrigramByYao(changingLowerYaoCode);
+            const changingUpperTrigram = getTrigramByYao(changingUpperYaoCode);
+
+            const originalHexagram = hexagramTable[originalUpperTrigram.symbol + originalLowerTrigram.symbol];
+            const changingHexagram = hexagramTable[changingUpperTrigram.symbol + changingLowerTrigram.symbol];
+
+            return {
+                numbers: numbers,
+                sum: num1 + num2 + num3,
+                originalHexagram: originalHexagram,
+                changingHexagram: changingHexagram,
+                changingLine: changingLine,
+                upperTrigram: originalUpperTrigram,
+                lowerTrigram: originalLowerTrigram,
+                changingUpperTrigram: changingUpperTrigram,
+                changingLowerTrigram: changingLowerTrigram
+            };
+        }
+        
+        // 根據爻的二進制代碼取得八卦
+        function getTrigramByYao(yaoCode) {
+            for (const key in trigramMap) {
+                if (trigramMap[key].yao === yaoCode) {
+                    return trigramMap[key];
+                }
+            }
+            return null;
+        }
+
+        // 隨機生成數字
+        function generateRandomNumbers() {
+            const numbers = [];
+            for (let i = 0; i < 3; i++) {
+                numbers.push(Math.floor(Math.random() * 100) + 1);
+            }
+            document.getElementById('divinationNumbers').value = numbers.join(',');
+        }
+
+        // 執行卜卦主函數
+        function performDivination() {
+            const input = document.getElementById('divinationNumbers').value.trim();
+            
+            if (!input) {
+                alert('請輸入數字進行卜卦。');
+                return;
+            }
+            
+            try {
+                const numbers = input.split(',').map(num => {
+                    const parsed = parseInt(num.trim());
+                    if (isNaN(parsed) || parsed < 1 || parsed > 100) {
+                        throw new Error(`數字 "${num.trim()}" 無效，請輸入1-100之間的整數。`);
+                    }
+                    return parsed;
+                });
+                
+                if (numbers.length !== 3) {
+                    alert('請輸入剛好3個數字。');
+                    return;
+                }
+                
+                const result = calculateHexagram(numbers);
+                displayDivinationResult(result);
+                
+            } catch (error) {
+                alert('輸入格式錯誤：\n' + error.message);
+            }
+        }
+
+        // 顯示卜卦結果
+        function displayDivinationResult(result) {
+            const originalHex = hexagrams[result.originalHexagram] || { name: '未知卦', chinese: '未知卦', symbol: '☯', judgment: '此卦資料庫未收錄。', image: '此卦資料庫未收錄。', lines: [] };
+            const changingHex = hexagrams[result.changingHexagram] || { name: '未知卦', chinese: '未知卦', symbol: '☯', judgment: '此卦資料庫未收錄。', image: '此卦資料庫未收錄。', lines: [] };
+
+            const resultSection = document.getElementById('resultSection');
+            const hexagramDisplay = document.getElementById('hexagramDisplay');
+
+            hexagramDisplay.innerHTML = `
+                <div class="divination-info">
+                    <div class="divination-process"><strong>卜卦數字：</strong>${result.numbers.join(', ')}</div>
+                    <div class="divination-process"><strong>上卦：</strong>${result.upperTrigram.symbol} ${result.upperTrigram.name}（${result.upperTrigram.nature}）</div>
+                    <div class="divination-process"><strong>下卦：</strong>${result.lowerTrigram.symbol} ${result.lowerTrigram.name}（${result.lowerTrigram.nature}）</div>
+                    <div class="divination-process"><strong>動爻：</strong>第${result.changingLine}爻</div>
+                </div>
+                <div class="hexagram-symbol">${originalHex.symbol}</div>
+                <div class="hexagram-name">${originalHex.chinese}</div>
+                <div class="hexagram-number">本卦：第 ${result.originalHexagram} 卦：${originalHex.name}</div>
+            `;
+            
+            document.getElementById('judgment').innerHTML = `
+                <h3>本卦卦辭</h3>
+                <p><strong>${originalHex.judgment}</strong></p>
+                <p>${originalHex.judgmentMeaning || ''}</p>
+            `;
+            
+            document.getElementById('image').innerHTML = `
+                <h3>本卦象辭</h3>
+                <p><strong>${originalHex.image}</strong></p>
+                <p>${originalHex.imageMeaning || ''}</p>
+            `;
+            
+            const linesHtml = (originalHex.lines || []).map((line, index) => {
+                const isChanging = (index + 1) === result.changingLine;
+                return `
+                    <div class="line-item ${isChanging ? 'changing-line' : ''}">
+                        <div class="line-title">${line.position} ${isChanging ? '🔥（動爻）' : ''}</div>
+                        <p><strong>${line.text}</strong></p>
+                        <p>${line.meaning}${isChanging ? ' ⭐ 此爻為動爻，變化的關鍵所在。' : ''}</p>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('lines').innerHTML = `
+                <h3>本卦爻辭</h3>
+                <div class="lines-container">${linesHtml || '無爻辭資料'}</div>
+            `;
+            
+            document.getElementById('changing').innerHTML = `
+                <h3>變卦：${changingHex.chinese}</h3>
+                <div style="text-align: center; margin: 20px 0; padding: 20px; background: #f0f8ff; border-radius: 10px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">${changingHex.symbol}</div>
+                    <div style="font-size: 1.3rem; color: #2c3e50; margin-bottom: 15px;">第 ${result.changingHexagram} 卦：${changingHex.name}</div>
+                    <div style="color: #666; font-size: 0.95rem;">
+                        變卦組成：${result.changingUpperTrigram.symbol}${result.changingUpperTrigram.name} 上 ${result.changingLowerTrigram.symbol}${result.changingLowerTrigram.name} 下
+                    </div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>變卦卦辭：</strong>${changingHex.judgment}
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>變卦意義：</strong>${changingHex.judgmentMeaning || ''}
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>變卦象辭：</strong>${changingHex.image}
+                </div>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>💡 卜卦指引：</strong><br>
+                    本卦顯示當前狀況，動爻指出變化關鍵，變卦預示發展趨勢。重點關注動爻的指導意義。
+                </div>
+            `;
+            
+            document.getElementById('changingTab').style.display = 'block';
+            showTab('judgment');
+            
+            resultSection.style.display = 'block';
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 切換分頁
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            const targetButton = document.querySelector(`.tab-btn[onclick="showTab('${tabName}')"]`);
+            if(targetButton) {
+                targetButton.classList.add('active');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHexagrams();
+        });
+    </script>
+</body>
+</html>
